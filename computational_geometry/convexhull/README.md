@@ -8,3 +8,9 @@ The convex hull of a set of points is the smallest convex area that contains the
 ### convexhull.py
 - contains convexhull(points) algorithm to find convexhull of the specified points
 
+### testconvexhull.py
+- tests algorithm on both default and random points
+
+![ch of default points](./CH.png)
+
+![ch of random points](./random_CH.png)
