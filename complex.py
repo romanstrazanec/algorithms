@@ -51,6 +51,3 @@ class Complex:
 
     def __repr__(self):
         return f"C({self.r},{self.i})"
-
-x = Complex(1,-2) 
-y = Complex(3,7)
