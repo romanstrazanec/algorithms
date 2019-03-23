@@ -1,40 +1,7 @@
-class Queue:
-    def __init__(self):
-        self.items = []
-
-    def __len__(self):
-        return len(self.items)
-
-    def __iter__(self):
-        return iter(self.items)
-
-    def __next__(self):
-        return next(self.items)
-
-    def __getitem__(self, index):
-        return self.items[index]
-
-    def add(self, *items):
-        for item in items:
-            if not self.contains(item):
-                self.items.append(item)
-        self.items = list(reversed(sorted(self.items)))
-
-    def pop(self):
-        return self.items.pop()
-
-    def contains(self, item):
-        return item in self.items
-
-    def __str__(self):
-        return str(self.items)
-
-
-class BinarySearchTree:
+class BalancedBinarySearchTree:
     def __init__(self, item=None):
         self.item = item
-        self.left = None
-        self.right = None
+        self.left, self.right = None, None
 
     def print(self):
         if self.left:
