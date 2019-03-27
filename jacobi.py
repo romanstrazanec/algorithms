@@ -5,7 +5,7 @@ def jacobiMetoda(A, b, pocetIteracii, x):
     # teda z prvej rovnice to bude A1, z druhej A2 a z tretej A3
     D = np.diag(A)
     
-    # odčítanie diagonýlnych hodnôt od matice A
+    # odčítanie diagonálnych hodnôt od matice A
     R = A - np.diagflat(D)
    
     for i in range(pocetIteracii):
