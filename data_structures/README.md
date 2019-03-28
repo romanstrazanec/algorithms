@@ -9,7 +9,7 @@ Methods:
 - isEmpty -> True if empty
 - push(item) -> pushes item to the top
 - pop -> gets item at the top and remove it
-- peek -> gets item under the top
+- peek -> gets item at the top without removing it
 - size -> gets size
 
 ## Queue
