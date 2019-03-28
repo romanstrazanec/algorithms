@@ -35,3 +35,13 @@ Methods:
 - removeFront -> get and remove item from the front
 - removeRear -> get and remove item from the back
 - size -> get size
+
+## Unordered List
+
+Methods:
+
+- isEmpty -> True if empty
+- add -> add item to the end
+- size -> get size
+- search -> check if item in list
+- remove -> remove item from the list
