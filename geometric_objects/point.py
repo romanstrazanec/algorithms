@@ -29,6 +29,7 @@ class Point:
 
     @staticmethod
     def from_iter(tpl):
+        """Create instance of point out of list, tuple or map with keys 0, 1"""
         return tpl if type(tpl) == Point else Point(tpl[0], tpl[1])
 
     def is_between(self, a, b):
