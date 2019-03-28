@@ -22,3 +22,16 @@ Methods:
 - enqueue -> add item to the end
 - dequeue -> get item from the front and remove it
 - size    -> get size
+
+## Deque
+
+A deque, also known as a double-ended queue, is an ordered collection of items similar to the queue. It has two ends, a front and a rear, and the items remain positioned in the collection. What makes a deque different is the unrestrictive nature of adding and removing items. New items can be added at either the front or the rear. Likewise, existing items can be removed from either end.
+
+Methods:
+
+- isEmpty -> True if empty
+- addFront -> add item to the front
+- addRear -> add item to the back
+- removeFront -> get and remove item from the front
+- removeRear -> get and remove item from the back
+- size -> get size
