@@ -36,7 +36,9 @@ Methods:
 - removeRear -> get and remove item from the back
 - size -> get size
 
-## Unordered List
+## List
+
+A list is a collection of items where each item holds a relative position with respect to the others.
 
 Methods:
 
