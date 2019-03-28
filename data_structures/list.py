@@ -1,7 +1,7 @@
 from .node import Node
 
 
-class UnorderedList:
+class List:
     def __init__(self):
         self.head = None
 
