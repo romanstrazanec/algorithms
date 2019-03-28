@@ -7,10 +7,10 @@ A stack (sometimes called a “push-down stack”) is an ordered collection of i
 Methods:
 
 - isEmpty -> True if empty
-- push    -> push item to the top
-- pop     -> get item at the top and remove it
-- peek    -> get item under the top
-- size    -> get size
+- push(item) -> pushes item to the top
+- pop -> gets item at the top and remove it
+- peek -> gets item under the top
+- size -> gets size
 
 ## Queue
 
@@ -19,9 +19,9 @@ A queue is an ordered collection of items where the addition of new items happen
 Methods:
 
 - isEmpty -> True if empty
-- enqueue -> add item to the end
-- dequeue -> get item from the front and remove it
-- size    -> get size
+- enqueue(item) -> adds item to the end
+- dequeue -> gets item from the front and remove it
+- size -> gets size
 
 ## Deque
 
@@ -30,11 +30,11 @@ A deque, also known as a double-ended queue, is an ordered collection of items s
 Methods:
 
 - isEmpty -> True if empty
-- addFront -> add item to the front
-- addRear -> add item to the back
-- removeFront -> get and remove item from the front
-- removeRear -> get and remove item from the back
-- size -> get size
+- addFront(item) -> adds item to the front
+- addRear(item) -> adds item to the back
+- removeFront -> gets and remove item from the front
+- removeRear -> gets and remove item from the back
+- size -> gets size
 
 ## List
 
@@ -43,7 +43,33 @@ A list is a collection of items where each item holds a relative position with r
 Methods:
 
 - isEmpty -> True if empty
-- add -> add item to the end
-- size -> get size
-- search -> check if item in list
-- remove -> remove item from the list
+- add(item) -> adds item to the end
+- size -> gets size
+- search(item) -> checks if item in list
+- remove(item) -> removes item from the list
+
+## Binary Tree
+
+A tree consists of a set of nodes and a set of edges that connect pairs of nodes. A tree has the following properties:
+
+- One node of the tree is designated as the root node.
+- Every node n, except the root node, is connected by an edge from exactly one other node p, where p is the parent of n.
+- A unique path traverses from the root to each node.
+- If each node in the tree has a maximum of two children, we say that the tree is a binary tree.
+
+Methods:
+
+- insertLeft(item) -> inserts item to the left of the current tree
+- insertRight(item) -> inserts item to the right of the current tree
+- getRightChild -> gets the right child
+- getLeftChild -> gets the left child
+- setRootVal(item) -> sets the root value
+- getRootVal -> gets the root value
+
+Performing a function on the whole tree with different order:
+
+- preorder(func, *args, **kwargs)
+- postorder(func, *args, **kwargs)
+- inorder(func, *args, **kwargs)
+
+These functions can be used as a part of an instance or as a part of the module with the tree as a first parameter.
