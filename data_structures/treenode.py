@@ -39,3 +39,53 @@ class TreeNode:
             self.leftChild.parent = self
         if self.hasRightChild():
             self.rightChild.parent = self
+
+    def findSuccessor(self):
+        succ = None
+        if self.hasRightChild():
+            succ = self.rightChild.findMin()
+        else:
+            if self.parent:
+                if self.isLeftChild():
+                    succ = self.parent
+                else:
+                    self.parent.rightChild = None
+                    succ = self.parent.findSuccessor()
+                    self.parent.rightChild = self
+        return succ
+
+    def findMin(self):
+        current = self
+        while current.hasLeftChild():
+            current = current.leftChild
+        return current
+
+    def spliceOut(self):
+        if self.isLeaf():
+            if self.isLeftChild():
+                self.parent.leftChild = None
+            else:
+                self.parent.rightChild = None
+        elif self.hasAnyChildren():
+            if self.hasLeftChild():
+                if self.isLeftChild():
+                    self.parent.leftChild = self.leftChild
+                else:
+                    self.parent.rightChild = self.leftChild
+                self.leftChild.parent = self.parent
+            else:
+                if self.isLeftChild():
+                    self.parent.leftChild = self.rightChild
+                else:
+                    self.parent.rightChild = self.rightChild
+                self.rightChild.parent = self.parent
+
+    def __iter__(self):
+        if self:
+            if self.hasLeftChild():
+                for elem in self.leftChild:
+                    yield elem
+            yield self.key
+            if self.hasRightChild():
+                for elem in self.rightChild:
+                    yield elem
