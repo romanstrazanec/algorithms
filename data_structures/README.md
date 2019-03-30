@@ -1,5 +1,10 @@
 # Data Structures
 
+Implemented algorithms from two topics of interactivepython website:
+
+- [Basic Data Structures](http://interactivepython.org/runestone/static/pythonds/BasicDS/toctree.html)
+- [Trees and Tree Algorithms](http://interactivepython.org/runestone/static/pythonds/Trees/toctree.html)
+
 ## Stack
 
 A stack (sometimes called a “push-down stack”) is an ordered collection of items where the addition of new items and the removal of existing items always takes place at the same end. This end is commonly referred to as the “top.” The end opposite the top is known as the “base.”
@@ -73,3 +78,4 @@ Performing a function on the whole tree with different order:
 - inorder(func, *args, **kwargs)
 
 These functions can be used as a part of an instance or as a part of the module with the tree as a first parameter.
+
