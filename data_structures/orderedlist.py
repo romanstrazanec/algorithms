@@ -5,34 +5,34 @@ class OrderedList:
     def __init__(self):
         self.head = None
 
-    def isEmpty(self):
-        return self.head == None
+    def is_empty(self):
+        return self.head is None
 
     def add(self, item):
         current = self.head
         previous = None
         stop = False
-        while current != None and not stop:
+        while current is not None and not stop:
             if current.getData() > item:
                 stop = True
             else:
                 previous = current
-                current = current.getNext()
+                current = current.get_next()
 
         temp = Node(item)
-        if previous == None:
-            temp.setNext(self.head)
+        if previous is None:
+            temp.set_next(self.head)
             self.head = temp
         else:
-            temp.setNext(current)
-            previous.setNext(temp)
+            temp.set_next(current)
+            previous.set_next(temp)
 
     def size(self):
         current = self.head
         count = 0
-        while current != None:
+        while current is not None:
             count = count + 1
-            current = current.getNext()
+            current = current.get_next()
 
         return count
 
@@ -40,14 +40,14 @@ class OrderedList:
         current = self.head
         found = False
         stop = False
-        while current != None and not found and not stop:
+        while current is not None and not found and not stop:
             if current.getData() == item:
                 found = True
             else:
                 if current.getData() > item:
                     stop = True
                 else:
-                    current = current.getNext()
+                    current = current.get_next()
 
         return found
 
@@ -60,9 +60,9 @@ class OrderedList:
                 found = True
             else:
                 previous = current
-                current = current.getNext()
+                current = current.get_next()
 
-        if previous == None:
-            self.head = current.getNext()
+        if previous is None:
+            self.head = current.get_next()
         else:
-            previous.setNext(current.getNext())
+            previous.set_next(current.get_next())

@@ -11,7 +11,7 @@ A stack (sometimes called a “push-down stack”) is an ordered collection of i
 
 Methods:
 
-- isEmpty -> True if empty
+- is_empty -> True if empty
 - push(item) -> pushes item to the top
 - pop -> gets item at the top and remove it
 - peek -> gets item at the top without removing it
@@ -23,7 +23,7 @@ A queue is an ordered collection of items where the addition of new items happen
 
 Methods:
 
-- isEmpty -> True if empty
+- is_empty -> True if empty
 - enqueue(item) -> adds item to the end
 - dequeue -> gets item from the front and remove it
 - size -> gets size
@@ -34,11 +34,11 @@ A deque, also known as a double-ended queue, is an ordered collection of items s
 
 Methods:
 
-- isEmpty -> True if empty
-- addFront(item) -> adds item to the front
-- addRear(item) -> adds item to the back
-- removeFront -> gets and remove item from the front
-- removeRear -> gets and remove item from the back
+- is_empty -> True if empty
+- add_front(item) -> adds item to the front
+- add_rear(item) -> adds item to the back
+- remove_front -> gets and remove item from the front
+- remove_rear -> gets and remove item from the back
 - size -> gets size
 
 ## List
@@ -47,7 +47,7 @@ A list is a collection of items where each item holds a relative position with r
 
 Methods:
 
-- isEmpty -> True if empty
+- is_empty -> True if empty
 - add(item) -> adds item to the end
 - size -> gets size
 - search(item) -> checks if item in list
@@ -64,12 +64,12 @@ A tree consists of a set of nodes and a set of edges that connect pairs of nodes
 
 Methods:
 
-- insertLeft(item) -> inserts item to the left of the current tree
-- insertRight(item) -> inserts item to the right of the current tree
-- getRightChild -> gets the right child
-- getLeftChild -> gets the left child
-- setRootVal(item) -> sets the root value
-- getRootVal -> gets the root value
+- insert_left(item) -> inserts item to the left of the current tree
+- insert_right(item) -> inserts item to the right of the current tree
+- get_left_child -> gets the left child
+- get_right_child -> gets the right child
+- set_root_val(item) -> sets the root value
+- get_root_val -> gets the root value
 
 Performing a function on the whole tree with different order:
 
