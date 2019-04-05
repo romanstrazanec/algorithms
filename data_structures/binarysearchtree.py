@@ -1,4 +1,4 @@
-from treenode import TreeNode
+from data_structures.treenode import TreeNode
 
 
 class BinarySearchTree:

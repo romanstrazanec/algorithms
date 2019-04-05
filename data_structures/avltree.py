@@ -1,5 +1,5 @@
-from treenode import TreeNode
-from binarysearchtree import BinarySearchTree
+from data_structures.treenode import TreeNode
+from data_structures.binarysearchtree import BinarySearchTree
 
 
 class AVLTree(BinarySearchTree):
@@ -18,16 +18,16 @@ class AVLTree(BinarySearchTree):
                 self.update_balance(current_node.right_child)
 
     def update_balance(self, node):
-        if node.balanceFactor > 1 or node.balanceFactor < -1:
+        if node.balance_factor > 1 or node.balance_factor < -1:
             self.rebalance(node)
             return
         if node.parent is not None:
             if node.isleft_child():
-                node.parent.balanceFactor += 1
+                node.parent.balance_factor += 1
             elif node.isright_child():
-                node.parent.balanceFactor -= 1
+                node.parent.balance_factor -= 1
 
-            if node.parent.balanceFactor != 0:
+            if node.parent.balance_factor != 0:
                 self.update_balance(node.parent)
 
     def rotate_left(self, rot_root):
@@ -45,10 +45,10 @@ class AVLTree(BinarySearchTree):
                 rot_root.parent.right_child = new_root
         new_root.left_child = rot_root
         rot_root.parent = new_root
-        rot_root.balanceFactor = rot_root.balanceFactor + \
-                                 1 - min(new_root.balanceFactor, 0)
-        new_root.balanceFactor = new_root.balanceFactor + \
-                                 1 + max(rot_root.balanceFactor, 0)
+        rot_root.balance_factor = rot_root.balance_factor + \
+                                 1 - min(new_root.balance_factor, 0)
+        new_root.balance_factor = new_root.balance_factor + \
+                                 1 + max(rot_root.balance_factor, 0)
 
     def rotate_right(self, rot_root):
         new_root = rot_root.left_child
@@ -65,20 +65,20 @@ class AVLTree(BinarySearchTree):
                 rot_root.parent.left_child = new_root
         new_root.right_child = rot_root
         rot_root.parent = new_root
-        rot_root.balanceFactor = rot_root.balanceFactor + \
-            1 - min(new_root.balanceFactor, 0)
-        new_root.balanceFactor = new_root.balanceFactor + \
-            1 + max(rot_root.balanceFactor, 0)
+        rot_root.balance_factor = rot_root.balance_factor + \
+            1 - min(new_root.balance_factor, 0)
+        new_root.balance_factor = new_root.balance_factor + \
+            1 + max(rot_root.balance_factor, 0)
 
     def rebalance(self, node):
-        if node.balanceFactor < 0:
-            if node.right_child.balanceFactor > 0:
+        if node.balance_factor < 0:
+            if node.right_child.balance_factor > 0:
                 self.rotate_right(node.right_child)
                 self.rotate_left(node)
             else:
                 self.rotate_left(node)
-        elif node.balanceFactor > 0:
-            if node.left_child.balanceFactor < 0:
+        elif node.balance_factor > 0:
+            if node.left_child.balance_factor < 0:
                 self.rotate_left(node.left_child)
                 self.rotate_right(node)
             else:

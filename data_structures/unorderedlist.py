@@ -1,4 +1,4 @@
-from node import Node
+from data_structures.node import Node
 
 
 class List:
@@ -10,7 +10,7 @@ class List:
 
     def add(self, item):
         temp = Node(item)
-        temp.setNext(self.head)
+        temp.set_next(self.head)
         self.head = temp
 
     def size(self):
@@ -18,7 +18,7 @@ class List:
         count = 0
         while current is not None:
             count = count + 1
-            current = current.getNext()
+            current = current.get_next()
 
         return count
 
@@ -26,10 +26,10 @@ class List:
         current = self.head
         found = False
         while current is not None and not found:
-            if current.getData() == item:
+            if current.get_data() == item:
                 found = True
             else:
-                current = current.getNext()
+                current = current.get_next()
 
         return found
 
@@ -38,13 +38,13 @@ class List:
         previous = None
         found = False
         while not found:
-            if current.getData() == item:
+            if current.get_data() == item:
                 found = True
             else:
                 previous = current
-                current = current.getNext()
+                current = current.get_next()
 
         if previous is None:
-            self.head = current.getNext()
+            self.head = current.get_next()
         else:
-            previous.setNext(current.getNext())
+            previous.set_next(current.get_next())
