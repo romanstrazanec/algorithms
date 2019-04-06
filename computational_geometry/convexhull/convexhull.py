@@ -2,7 +2,7 @@ from geometric_objects.point import Point
 from sys import float_info
 
 
-def derivation(p1: Point, p2: Point):
+def _derivation(p1: Point, p2: Point):
     """Returns the derivation between two points"""
     dy = p2.y - p1.y  # difference between y values
     # dx = p2.x - p1.x # difference between x values
@@ -12,9 +12,9 @@ def derivation(p1: Point, p2: Point):
         return dy/float_info.epsilon  # divide by the smallest possible value
 
 
-def is_rightturn(points: list):
+def _is_rightturn(points: list):
     """Checks if the first three given points list is a right turn"""
-    return derivation(points[0], points[1]) > derivation(points[0], points[2])
+    return _derivation(points[0], points[1]) > _derivation(points[0], points[2])
 
 
 def convexhull(ps: list):
@@ -29,7 +29,7 @@ def convexhull(ps: list):
         Lupper.append(ps[i])  # add the next point to L set
 
         # test the last three points in L
-        while len(Lupper) > 2 and not is_rightturn(Lupper[-3:]):
+        while len(Lupper) > 2 and not _is_rightturn(Lupper[-3:]):
             # remove the middle of tested three points when they don't make rightturn
             Lupper.pop(-2)
 
@@ -37,7 +37,7 @@ def convexhull(ps: list):
     # apply the same algorithm for reversed values
     for i in reversed(range(len(ps) - 3)):
         Llower.append(ps[i])
-        while len(Llower) > 2 and not is_rightturn(Llower[-3:]):
+        while len(Llower) > 2 and not _is_rightturn(Llower[-3:]):
             Llower.pop(-2)
 
     # remove the first from lower L as it is the same as the last in the upper L

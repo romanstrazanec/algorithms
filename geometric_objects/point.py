@@ -16,7 +16,7 @@ class Point:
 
     def __eq__(self, other):
         """Equality of points"""
-        return self.x == other.x and self.y == other.y
+        return self[0] == other[0] and self[1] == other[1]
 
     def __lt__(self, other):
         if self.y == other.y:
