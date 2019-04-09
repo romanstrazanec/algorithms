@@ -13,7 +13,7 @@ class OrderedList:
         previous = None
         stop = False
         while current is not None and not stop:
-            if current.getData() > item:
+            if current.get_data() > item:
                 stop = True
             else:
                 previous = current
@@ -41,10 +41,10 @@ class OrderedList:
         found = False
         stop = False
         while current is not None and not found and not stop:
-            if current.getData() == item:
+            if current.get_data() == item:
                 found = True
             else:
-                if current.getData() > item:
+                if current.get_data() > item:
                     stop = True
                 else:
                     current = current.get_next()
@@ -56,7 +56,7 @@ class OrderedList:
         previous = None
         found = False
         while not found:
-            if current.getData() == item:
+            if current.get_data() == item:
                 found = True
             else:
                 previous = current
