@@ -22,9 +22,9 @@ class AVLTree(BinarySearchTree):
             self.rebalance(node)
             return
         if node.parent is not None:
-            if node.isleft_child():
+            if node.is_left_child():
                 node.parent.balance_factor += 1
-            elif node.isright_child():
+            elif node.is_right_child():
                 node.parent.balance_factor -= 1
 
             if node.parent.balance_factor != 0:
@@ -36,10 +36,10 @@ class AVLTree(BinarySearchTree):
         if new_root.left_child is not None:
             new_root.left_child.parent = rot_root
         new_root.parent = rot_root.parent
-        if rot_root.isRoot():
+        if rot_root.is_root():
             self.root = new_root
         else:
-            if rot_root.isleft_child():
+            if rot_root.is_left_child():
                 rot_root.parent.left_child = new_root
             else:
                 rot_root.parent.right_child = new_root
@@ -56,10 +56,10 @@ class AVLTree(BinarySearchTree):
         if new_root.right_child is not None:
             new_root.right_child.parent = rot_root
         new_root.parent = rot_root.parent
-        if rot_root.isRoot():
+        if rot_root.is_root():
             self.root = new_root
         else:
-            if rot_root.isright_child():
+            if rot_root.is_right_child():
                 rot_root.parent.right_child = new_root
             else:
                 rot_root.parent.left_child = new_root

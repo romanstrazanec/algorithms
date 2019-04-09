@@ -32,44 +32,44 @@ class BinaryTree:
     def get_root_val(self):
         return self.key
 
-    def preorder(self, func, *args, **kwargs):
+    def pre_order(self, func, *args, **kwargs):
         func(self.key, *args, **kwargs)
         if self.left_child:
-            self.left_child.preorder(func, *args, **kwargs)
+            self.left_child.pre_order(func, *args, **kwargs)
         if self.right_child:
-            self.right_child.preorder(func, *args, **kwargs)
+            self.right_child.pre_order(func, *args, **kwargs)
 
-    def postorder(self, func, *args, **kwargs):
+    def post_order(self, func, *args, **kwargs):
         if self.left_child:
-            self.left_child.postorder(func, *args, **kwargs)
+            self.left_child.post_order(func, *args, **kwargs)
         if self.right_child:
-            self.right_child.postorder(func, *args, **kwargs)
+            self.right_child.post_order(func, *args, **kwargs)
         func(self.key, *args, **kwargs)
 
-    def inorder(self, func, *args, **kwargs):
+    def in_order(self, func, *args, **kwargs):
         if self.left_child:
-            self.left_child.inorder(func, *args, **kwargs)
+            self.left_child.in_order(func, *args, **kwargs)
         func(self.key, *args, **kwargs)
         if self.right_child:
-            self.right_child.inorder(func, *args, **kwargs)
+            self.right_child.in_order(func, *args, **kwargs)
 
 
-def preorder(tree, func, *args, **kwargs):
+def pre_order(tree, func, *args, **kwargs):
     if tree:
         func(tree.get_root_val(), *args, **kwargs)
-        preorder(tree.get_left_child(), func, *args, **kwargs)
-        preorder(tree.get_right_child(), func, *args, **kwargs)
+        pre_order(tree.get_left_child(), func, *args, **kwargs)
+        pre_order(tree.get_right_child(), func, *args, **kwargs)
 
 
-def postorder(tree, func, *args, **kwargs):
+def post_order(tree, func, *args, **kwargs):
     if tree:
-        postorder(tree.get_left_child(), func, *args, **kwargs)
-        postorder(tree.get_right_child(), func, *args, **kwargs)
+        post_order(tree.get_left_child(), func, *args, **kwargs)
+        post_order(tree.get_right_child(), func, *args, **kwargs)
         func(tree.get_root_val(), *args, **kwargs)
 
 
-def inorder(tree, func, *args, **kwargs):
+def in_order(tree, func, *args, **kwargs):
     if tree is not None:
-        inorder(tree.get_left_child(), func, *args, **kwargs)
+        in_order(tree.get_left_child(), func, *args, **kwargs)
         func(tree.get_root_val(), *args, **kwargs)
-        inorder(tree.get_right_child(), func, *args, **kwargs)
+        in_order(tree.get_right_child(), func, *args, **kwargs)

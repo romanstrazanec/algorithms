@@ -4,23 +4,23 @@ from data_structures.treenode import TreeNode
 class BinarySearchTree:
     def __init__(self):
         self.root = None
-        self.size = 0
+        self._size = 0
 
     def length(self):
-        return self.size
+        return self._size
 
     def __len__(self):
-        return self.size
+        return self._size
 
     def __iter__(self):
-        return self.root.__iter__()
+        return self.root.__iter__() if self.root is not None else iter([])
 
     def put(self, key, val):
         if self.root:
             self._put(key, val, self.root)
         else:
             self.root = TreeNode(key, val)
-        self.size += 1
+        self._size += 1
 
     def _put(self, key, val, current_node):
         if key == current_node.key:  # if key already exists, replace value
@@ -66,16 +66,16 @@ class BinarySearchTree:
         return True if self._get(key, self.root) else False
 
     def delete(self, key):
-        if self.size > 1:
+        if self._size > 1:
             node_to_remove = self._get(key, self.root)
             if node_to_remove:
                 self.remove(node_to_remove)
-                self.size -= 1
+                self._size -= 1
             else:
                 raise KeyError('Error, key not in tree')
-        elif self.size == 1 and self.root.key == key:
+        elif self._size == 1 and self.root.key == key:
             self.root = None
-            self.size -= 1
+            self._size -= 1
         else:
             raise KeyError('Error, key not in tree')
 
@@ -84,14 +84,14 @@ class BinarySearchTree:
         self.delete(key)
 
     def remove(self, current_node):
-        if current_node.isLeaf():
+        if current_node.is_leaf():
             if current_node == current_node.parent.left_child:
                 current_node.parent.left_child = None
             else:
                 current_node.parent.right_child = None
-        elif current_node.hasBothChildren():  # interior
-            succ = current_node.findSuccessor()
-            succ.spliceOut()
+        elif current_node.has_both_children():  # interior
+            succ = current_node.find_successor()
+            succ.splice_out()
             current_node.key = succ.key
             current_node.payload = succ.payload
         else:  # this node has one child
