@@ -5,6 +5,12 @@ class List:
     def __init__(self):
         self.head = None
 
+    def __iter__(self):
+        node = self.head
+        while node is not None:
+            yield node
+            node = node.get_next()
+
     def is_empty(self):
         return self.head is None
 

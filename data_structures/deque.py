@@ -2,6 +2,10 @@ class Deque:
     def __init__(self):
         self.items = []
 
+    def __iter__(self):
+        while not self.is_empty():
+            yield self.remove_front()
+
     def is_empty(self):
         return self.items == []
 
