@@ -1,27 +1,17 @@
 from objects import Point
-from sys import float_info
 from typing import List, Union, Tuple
-
-
-def _derivation(p1: Point, p2: Point) -> float:
-    """Returns the derivation between two points"""
-    dy = p2.y - p1.y  # difference between y values
-    # dx = p2.x - p1.x # difference between x values
-    try:
-        return dy / (p2.x - p1.x)
-    except ZeroDivisionError:  # x values could be the same resulting in 0 division
-        return dy / float_info.epsilon  # divide by the smallest possible value
 
 
 def _is_right_turn(p_start: Point, p_middle: Point, p_end: Point) -> bool:
     """Checks if the first three given points list is a right turn"""
-    return _derivation(p_start, p_middle) > _derivation(p_start, p_end)
+    return (p_start.x * (p_end.y - p_middle.y) + p_middle.x * (p_start.y - p_end.y)
+            + p_end.x * (p_middle.y - p_start.y)) > 0
 
 
-def convex_hull(ps: List[Union[Tuple[float, float], List[float, float], Point]]) -> List[Point]:
+def convex_hull(ps: List[Union[Tuple[float, float], List[float], Point]]) -> List[Point]:
     """For given list of points return its convex hull"""
-    at = (tuple, list, Point)  # allowed types
-    ps = [Point.from_iter(i) for i in ps if type(i) in at]  # converts to points
+    _at = (tuple, list, Point)  # allowed types
+    ps = [Point.from_iter(i) for i in ps if type(i) in _at]  # converts to points
 
     ps.sort(key=lambda p: p.x)  # sort points by x axis
     l_upper = [ps[0], ps[1]]  # add two leftmost points to L(upper) set
