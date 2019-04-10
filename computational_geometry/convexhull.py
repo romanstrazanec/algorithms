@@ -1,6 +1,6 @@
 from objects import Point
 from sys import float_info
-from typing import List
+from typing import List, Union, Tuple
 
 
 def _derivation(p1: Point, p2: Point) -> float:
@@ -13,12 +13,12 @@ def _derivation(p1: Point, p2: Point) -> float:
         return dy / float_info.epsilon  # divide by the smallest possible value
 
 
-def _is_right_turn(pstart: Point, pmiddle: Point, pend: Point) -> bool:
+def _is_right_turn(p_start: Point, p_middle: Point, p_end: Point) -> bool:
     """Checks if the first three given points list is a right turn"""
-    return _derivation(pstart, pmiddle) > _derivation(pstart, pend)
+    return _derivation(p_start, p_middle) > _derivation(p_start, p_end)
 
 
-def convex_hull(ps: list) -> List[Point]:
+def convex_hull(ps: List[Union[Tuple[float, float], List[float, float], Point]]) -> List[Point]:
     """For given list of points return its convex hull"""
     at = (tuple, list, Point)  # allowed types
     ps = [Point.from_iter(i) for i in ps if type(i) in at]  # converts to points
