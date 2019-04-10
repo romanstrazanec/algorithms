@@ -17,7 +17,7 @@ def _is_right_turn(pstart: Point, pmiddle: Point, pend: Point) -> bool:
     return _derivation(pstart, pmiddle) > _derivation(pstart, pend)
 
 
-def convexhull(ps: list):
+def convex_hull(ps: list):
     """For given list of points return its convex hull"""
     at = (tuple, list, Point)  # allowed types
     ps = [Point.from_iter(i) for i in ps if type(i) in at]  # converts to points

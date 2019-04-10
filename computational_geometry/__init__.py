@@ -1,4 +1,4 @@
-from convexhull import convexhull
+from convexhull import convex_hull
 
 
-__all__ = []
+__all__ = [convex_hull]
