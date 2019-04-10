@@ -1,5 +1,5 @@
-from data_structures.treenode import TreeNode
-from data_structures.binarysearchtree import BinarySearchTree
+from structures.treenode import TreeNode
+from structures.binarysearchtree import BinarySearchTree
 
 
 class AVLTree(BinarySearchTree):

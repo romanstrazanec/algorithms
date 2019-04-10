@@ -1,4 +1,4 @@
-from geometric_objects import Point
+from objects import Point
 
 
 class LineSegment:

@@ -1,6 +1,6 @@
-from geometric_objects.point import Point
-from geometric_objects.linesegment import LineSegment
-from data_structures.avltree import AVLTree
+from objects.point import Point
+from objects.linesegment import LineSegment
+from structures.avltree import AVLTree
 
 
 def intersection(sl: LineSegment, sr: LineSegment, p: Point):
