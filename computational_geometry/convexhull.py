@@ -1,4 +1,4 @@
-from geometric_objects.point import Point
+from geometric_objects import Point
 from sys import float_info
 from typing import List
 
