@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 from random import random
-from convexhull import convexhull
+from computational_geometry import convexhull
 
 
 def showpoints(points, **kwargs):

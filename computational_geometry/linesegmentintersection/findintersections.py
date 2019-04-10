@@ -1,5 +1,6 @@
-from objects import Point, LineSegment
-from datastructures import Queue, BinarySearchTree
+from geometric_objects.point import Point
+from geometric_objects.linesegment import LineSegment
+from data_structures.avltree import AVLTree
 
 
 def intersection(sl: LineSegment, sr: LineSegment, p: Point):
@@ -40,16 +41,21 @@ def find_new_event(sl: LineSegment, sr: LineSegment, p: Point, q: Queue):
         q.add([ip, None])
 
 
-def handle_event_point(point, q: Queue):
+def handle_event_point(point: Point):
     # set of segments whose upper endpoint is given point
     U = set(ls for p, ls in q if p == point)
 
 
 def find_intersections(linesegments):
-    eventqueue = Queue()
-    for ls in linesegments:
-        sorted_endpoints = sortedep(ls)
-        eventqueue.add([sorted_endpoints[0], ls], [sorted_endpoints[1], None])
-    status = BinarySearchTree()
-    while len(eventqueue) > 0:
-        handle_event_point(eventqueue.pop())
+    q = AVLTree()  # event queue
+
+    for i, linesegment in enumerate(linesegments):
+        # save upper endpoint with corresponding line segment
+        q.put(linesegment.endpoints[0], linesegment)
+        # save lower endpoint
+        q.put(linesegment.endpoints[1], None)
+
+    t = AVLTree()  # status structure
+    while q.length() > 0:
+        handle_event_point(q.root)
+        q.remove(q.root)
