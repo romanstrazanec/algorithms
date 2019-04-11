@@ -1,4 +1,4 @@
-from structures.node import Node
+from structures import Node
 
 
 class List:
