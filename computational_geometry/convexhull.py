@@ -3,7 +3,7 @@ from typing import List, Union, Tuple
 
 
 def _is_right_turn(p_start: Point, p_middle: Point, p_end: Point) -> bool:
-    """Checks if the first three given points list is a right turn"""
+    """Checks if the given points make a right turn"""
     return (p_start.x * (p_end.y - p_middle.y) + p_middle.x * (p_start.y - p_end.y)
             + p_end.x * (p_middle.y - p_start.y)) > 0
 

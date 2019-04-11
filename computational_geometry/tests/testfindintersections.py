@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from findintersections import intersection, in_order
+from findintersections import intersection
 from objects import Point, LineSegment
 
 
