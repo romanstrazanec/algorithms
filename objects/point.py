@@ -18,11 +18,6 @@ class Point:
         """Equality of points"""
         return self[0] == other[0] and self[1] == other[1]
 
-    def __lt__(self, other):
-        if self.y == other.y:
-            return self.x < other.x  # smaller point is more left
-        return self.y > other.y  # smaller point is higher
-
     @staticmethod
     def distance(a, b):
         return sqrt((a.x - b.x)**2 + (a.y - b.y)**2)

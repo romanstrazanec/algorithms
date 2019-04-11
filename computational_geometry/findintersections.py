@@ -1,18 +1,28 @@
-from objects.point import Point
-from objects.linesegment import LineSegment
-from structures.avltree import AVLTree
+from objects import Point
+from objects import LineSegment
+from structures import AVLTree
+
+
+def _point_order(p1: Point, p2: Point):
+    if p1.y == p2.y:
+        return p1.x < p2.x  # smaller point is more left
+    return p1.y > p2.y  # smaller point is higher
+
+
+# define order for points
+Point.__lt__ = _point_order
 
 
 def intersection(sl: LineSegment, sr: LineSegment, p: Point):
     """Returns intersection point of segments sl, sr below point p"""
     p1, p2 = sl.endpoints
     p3, p4 = sr.endpoints
-    t1 = (p1.x-p3.x)*(p3.y-p4.y)-(p1.y-p3.y)*(p3.x-p4.x)
-    t2 = (p1.x-p2.x)*(p3.y-p4.y)-(p1.y-p2.y)*(p3.x-p4.x)
-    if t1 > t2 or t1*t2 < 0:
+    t1 = (p1.x - p3.x) * (p3.y - p4.y) - (p1.y - p3.y) * (p3.x - p4.x)
+    t2 = (p1.x - p2.x) * (p3.y - p4.y) - (p1.y - p2.y) * (p3.x - p4.x)
+    if t1 > t2 or t1 * t2 < 0:
         return None
-    t = t1/t2
-    ip = Point(p1.x + t*(p2.x-p1.x), p1.y + t*(p2.y-p1.y))
+    t = t1 / t2
+    ip = Point(p1.x + t * (p2.x - p1.x), p1.y + t * (p2.y - p1.y))
     return ip if p < ip else None
 
 
