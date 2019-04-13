@@ -1,6 +1,8 @@
 from objects import Point
 from objects import LineSegment
+from structures import TreeNode
 from structures import AVLTree
+from typing import List
 
 
 def _point_order(p1: Point, p2: Point):
@@ -51,21 +53,31 @@ def find_new_event(sl: LineSegment, sr: LineSegment, p: Point, q: Queue):
         q.add([ip, None])
 
 
-def handle_event_point(point: Point):
-    # set of segments whose upper endpoint is given point
-    U = set(ls for p, ls in q if p == point)
+def _handle_event_point(event_point: TreeNode) -> None:
+    # U is the set of line segments whose upper endpoint is the event point
+    # given end point is TreeNode where key is the actual point and the value is a list of line segments
+    U = event_point.value
 
 
-def find_intersections(linesegments):
+def find_intersections(line_segments: List[LineSegment]) -> List[Point]:
     q = AVLTree()  # event queue
 
-    for i, linesegment in enumerate(linesegments):
+    for line_segment in line_segments:
         # save upper endpoint with corresponding line segment
-        q.put(linesegment.endpoints[0], linesegment)
+        if line_segment.endpoints[0] in q:
+            # append line segment to the list
+            # these line_segments start at the same point
+            q[line_segment.endpoints[0]].append(line_segment)
+        else:
+            # create new entry
+            q.put(line_segment.endpoints[0], [line_segment])
+
         # save lower endpoint
-        q.put(linesegment.endpoints[1], None)
+        if line_segment.endpoints[1] not in q:
+            # create new entry if does not already exist
+            q.put(line_segment.endpoints[1], [])
 
     t = AVLTree()  # status structure
     while q.length() > 0:
-        handle_event_point(q.root)
-        q.remove(q.root)
+        _handle_event_point(q.root.find_min())
+        del q[q.root.key]
