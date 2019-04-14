@@ -18,14 +18,18 @@ class Point:
         """Equality of points"""
         return self[0] == other[0] and self[1] == other[1]
 
-    @staticmethod
-    def distance(a, b):
-        return sqrt((a.x - b.x)**2 + (a.y - b.y)**2)
+    def __lt__(self, other):
+        """Smaller point is closer to the origin"""
+        return sqrt(self.x * self.x + self.y * self.y) < sqrt(other.x * other.x + other.y * other.y)
 
     @staticmethod
-    def from_iter(tpl):
+    def distance(a, b) -> float:
+        return sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2)
+
+    @classmethod
+    def from_iter(cls, tpl):
         """Create instance of point out of list, tuple or map with keys 0, 1"""
-        return tpl if type(tpl) == Point else Point(tpl[0], tpl[1])
+        return tpl if type(tpl) is cls else cls(tpl[0], tpl[1])
 
     def is_between(self, a, b):
         return Point.distance(a, self) + Point.distance(self, b) == Point.distance(a, b)

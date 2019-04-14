@@ -5,59 +5,45 @@ from objects.point import Point
 from structures.avltree import AVLTree
 from structures.treenode import TreeNode
 
-
-def _point_order(p1: Point, p2: Point):
-    if p1.y == p2.y:
-        return p1.x < p2.x  # smaller point is more left
-    return p1.y > p2.y  # smaller point is higher
+# define order for points, where smaller point is higher and more left
+Point.__lt__ = lambda p1, p2: p1.x < p2.x if p1.y == p2.y else p1.y > p2.y
 
 
-# define order for points
-Point.__lt__ = _point_order
+def _find_new_event(sl: LineSegment, sr: LineSegment, p: Point, q: AVLTree) -> None:
+    """Finds new event point below the sweep line (point p)"""
+    ip = LineSegment.intersection(sl, sr)
+    # ip > p => intersection point is below the sweep line or on it and to the right of the point p
+    if ip and ip > p and ip not in q:
+        q.put(ip, [])
 
 
-def intersection(sl: LineSegment, sr: LineSegment, p: Point):
-    """Returns intersection point of segments sl, sr below point p"""
-    p1, p2 = sl.endpoints
-    p3, p4 = sr.endpoints
-    t1 = (p1.x - p3.x) * (p3.y - p4.y) - (p1.y - p3.y) * (p3.x - p4.x)
-    t2 = (p1.x - p2.x) * (p3.y - p4.y) - (p1.y - p2.y) * (p3.x - p4.x)
-    if t1 > t2 or t1 * t2 < 0:
-        return None
-    t = t1 / t2
-    ip = Point(p1.x + t * (p2.x - p1.x), p1.y + t * (p2.y - p1.y))
-    return ip if p < ip else None
-
-
-def in_order(points):
-    """Defines the order of points
-    whereas the upmost leftmost point is the smallest
-    returns true if given points are in order
-    """
-    p1, p2 = points[:2]
-    return p2 > p1
-
-
-def sortedep(ls: LineSegment):
-    """Returns sorted endpoints of a given line segment"""
-    if not in_order(ls.endpoints):
-        return list(reversed(ls.endpoints))
-    return ls.endpoints
-
-
-def find_new_event(sl: LineSegment, sr: LineSegment, p: Point, q):
-    ip = intersection(sl, sr, p)
-    if ip:
-        for ep, ls in q:
-            if ep == ip:
-                return
-        q.add([ip, None])
-
-
-def _handle_event_point(event_point: TreeNode) -> None:
-    # U is the set of line segments whose upper endpoint is the event point
+def _handle_event_point(event_point: TreeNode, status: AVLTree) -> None:
+    # u is the set of line segments whose upper endpoint is the event point
     # given end point is TreeNode where key is the actual point and the value is a list of line segments
-    U = event_point.value
+    u = event_point.value
+    l = []  # line segments whose lower endpoint is the event point
+    c = []  # line segments which contain the event point in its interior
+    for line_segment in status:
+        if event_point.key == line_segment[1]:
+            l.append(line_segment)
+        elif event_point.key in line_segment:
+            c.append(line_segment)
+
+    if len(u) + len(l) + len(c) > 1:
+        pass
+
+    # remove line segments in l and c from status
+    for line_segment in l + c:
+        del status[line_segment]
+
+    # add line segments in u and c to status
+    for line_segment in u + c:
+        sweep_line = LineSegment(
+            [Point(line_segment[0].x, event_point.key.y), Point(line_segment[1].x, event_point.key.y)])
+        status.put(LineSegment.intersection(sweep_line, line_segment).x, line_segment)
+
+    if len(u) + len(c) == 0:
+        pass
 
 
 def find_intersections(line_segments: List[LineSegment]) -> List[Point]:
@@ -78,8 +64,10 @@ def find_intersections(line_segments: List[LineSegment]) -> List[Point]:
             # create new entry if does not already exist
             q.put(line_segment.endpoints[1], [])
 
-    t = AVLTree()  # status structure
+    t = AVLTree()  # status structure of the sweep line
     while q.length() > 0:
+        # point_to_handle is a TreeNode with point as the key
+        # and list of line segments starting in this point as the value
         point_to_handle = q.root.find_min()
-        _handle_event_point()
+        _handle_event_point(point_to_handle, t)
         del q[q.root.key]
