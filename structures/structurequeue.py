@@ -1,4 +1,4 @@
-class Queue:
+class StructureQueue:
     def __init__(self):
         self.items = []
 

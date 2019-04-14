@@ -1,4 +1,4 @@
-from objects import Point
+from objects.point import Point
 
 
 class LineSegment:

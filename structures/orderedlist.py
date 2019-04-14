@@ -1,4 +1,4 @@
-from structures import Node
+from structures.node import Node
 
 
 class OrderedList:

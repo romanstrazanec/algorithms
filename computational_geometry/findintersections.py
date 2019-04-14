@@ -1,8 +1,9 @@
-from objects import Point
-from objects import LineSegment
-from structures import TreeNode
-from structures import AVLTree
 from typing import List
+
+from objects.linesegment import LineSegment
+from objects.point import Point
+from structures.avltree import AVLTree
+from structures.treenode import TreeNode
 
 
 def _point_order(p1: Point, p2: Point):
@@ -44,7 +45,7 @@ def sortedep(ls: LineSegment):
     return ls.endpoints
 
 
-def find_new_event(sl: LineSegment, sr: LineSegment, p: Point, q: Queue):
+def find_new_event(sl: LineSegment, sr: LineSegment, p: Point, q):
     ip = intersection(sl, sr, p)
     if ip:
         for ep, ls in q:
@@ -79,5 +80,6 @@ def find_intersections(line_segments: List[LineSegment]) -> List[Point]:
 
     t = AVLTree()  # status structure
     while q.length() > 0:
-        _handle_event_point(q.root.find_min())
+        point_to_handle = q.root.find_min()
+        _handle_event_point()
         del q[q.root.key]

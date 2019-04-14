@@ -1,5 +1,6 @@
-from objects import Point
 from typing import List, Union, Tuple
+
+from objects.point import Point
 
 
 def _is_right_turn(p_start: Point, p_middle: Point, p_end: Point) -> bool:
