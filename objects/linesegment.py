@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import List, Optional
 
 from objects.point import Point
 
@@ -13,6 +13,9 @@ class LineSegment:
     def __str__(self):
         return f"[{self.endpoints[0]}-{self.endpoints[1]}]"
 
+    def __repr__(self):
+        return f"LineSegment({str(self.endpoints[0])}-{str(self.endpoints[1])})"
+
     def __contains__(self, point: Point):
         return point.is_between(*self.endpoints)
 
@@ -20,13 +23,14 @@ class LineSegment:
         return self.endpoints == other.endpoints
 
     def __lt__(self, other):
-        return self.length() < other.length()
+        return self.length < other.length
 
+    @property
     def length(self) -> float:
         return Point.distance(*self.endpoints)
 
     @staticmethod
-    def intersection(l1, l2) -> Union[Point, None]:
+    def intersection(l1, l2) -> Optional[Point]:
         p1, p2 = l1.endpoints
         p3, p4 = l2.endpoints
         t1 = (p1.x - p3.x) * (p3.y - p4.y) - (p1.y - p3.y) * (p3.x - p4.x)
@@ -35,3 +39,10 @@ class LineSegment:
             return None
         t = t1 / t2
         return Point(p1.x + t * (p2.x - p1.x), p1.y + t * (p2.y - p1.y))
+
+    @property
+    def slope(self):
+        p1, p2 = self.endpoints
+        if p1.x == p2.x:
+            return float('inf')
+        return (p2.y-p1.y)/(p2.x-p1.x)

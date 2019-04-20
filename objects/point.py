@@ -10,6 +10,10 @@ class Point:
         """(x,y)"""
         return f"({self.x:g},{self.y:g})"
 
+    def __repr__(self):
+        """(x,y)"""
+        return f"Point({self.x:g}, {self.y:g})"
+
     def __getitem__(self, i):
         """Makes Point coords accessible by indexing"""
         return {0: self.x, 1: self.y}.get(i, None)

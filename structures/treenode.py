@@ -41,25 +41,50 @@ class TreeNode:
         if self.has_right_child():
             self.right_child.parent = self
 
-    def find_successor(self):
-        successor = None
+    @property
+    def successor(self):
+        res = None
         if self.has_right_child():
-            successor = self.right_child.find_min()
+            res = self.right_child.min
         else:
             if self.parent:
                 if self.is_left_child():
-                    successor = self.parent
+                    res = self.parent
                 else:
                     self.parent.right_child = None
-                    successor = self.parent.find_successor()
+                    res = self.parent.successor
                     self.parent.right_child = self
-        return successor
+        return res
 
-    def find_min(self):
+    @property
+    def predecessor(self):
+        res = None
+        if self.has_left_child():
+            res = self.left_child.max
+        else:
+            if self.parent:
+                if self.is_right_child():
+                    res = self.parent
+                else:
+                    self.parent.left_child = None
+                    res = self.parent.predecessor
+                    self.parent.left_child = self
+        return res
+
+    @property
+    def min(self):
         current = self
         # dive all the way to the left side of the tree to find min
         while current.has_left_child():
             current = current.left_child
+        return current
+
+    @property
+    def max(self):
+        current = self
+        # dive all the way to the right side of the tree to find max
+        while current.has_right_child():
+            current = current.right_child
         return current
 
     def splice_out(self) -> None:
@@ -87,7 +112,13 @@ class TreeNode:
             if self.has_left_child():
                 for elem in self.left_child:
                     yield elem
-            yield self.key
+            yield self
             if self.has_right_child():
                 for elem in self.right_child:
                     yield elem
+
+    def __str__(self):
+        return f"{self.key}: {self.value}"
+
+    def __repr__(self):
+        return f"TreeNode({self.key}, {self.value})"

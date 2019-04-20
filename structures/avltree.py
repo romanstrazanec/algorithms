@@ -3,18 +3,30 @@ from structures.treenode import TreeNode
 
 
 class AVLTree(BinarySearchTree):
-    def _put(self, key, val, current_node: TreeNode) -> None:
+    def _put(self, key, val, current_node: TreeNode, append: bool = False) -> None:
+        if key == current_node.key:
+            if append:
+                if type(current_node.value) is not list:  # make it a list
+                    current_node.value = [current_node.value, val]  # and append value to it
+                else:  # already a list
+                    current_node.value.append(val)  # append to the end
+            else:
+                current_node.value = val  # replace the value
+            return
+
         if key < current_node.key:
             if current_node.has_left_child():
-                self._put(key, val, current_node.left_child)
+                self._put(key, val, current_node.left_child, append)
             else:
-                current_node.left_child = TreeNode(key, val, parent=current_node)
+                current_node.left_child = TreeNode(key, [val] if append else val, parent=current_node)
+                self._size += 1
                 self.update_balance(current_node.left_child)
         else:
             if current_node.has_right_child():
-                self._put(key, val, current_node.right_child)
+                self._put(key, val, current_node.right_child, append)
             else:
-                current_node.right_child = TreeNode(key, val, parent=current_node)
+                current_node.right_child = TreeNode(key, [val] if append else val, parent=current_node)
+                self._size += 1
                 self.update_balance(current_node.right_child)
 
     def update_balance(self, node: TreeNode) -> None:

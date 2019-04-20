@@ -1,6 +1,6 @@
 from setuptools import setup
 
-setup(name='algorithms',
+setup(name='romanstrazanec_algorithms',
       version=0.0,
       description='Algorithms',
       author='Roman Stražanec',
