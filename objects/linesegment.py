@@ -29,20 +29,36 @@ class LineSegment:
     def length(self) -> float:
         return Point.distance(*self.endpoints)
 
+    # @staticmethod
+    # def intersection(l1, l2) -> Optional[Point]:
+    #     p1, p2 = l1.endpoints
+    #     p3, p4 = l2.endpoints
+    #     t1 = (p1.x - p2.x) * (p1.y - p3.y) - (p1.y - p2.y) * (p1.x - p3.x)
+    #     t2 = (p1.x - p2.x) * (p3.y - p4.y) - (p1.y - p2.y) * (p3.x - p4.x)
+    #     if t2 == 0 or t1 < t2 or t1 * t2 > 0:
+    #         return None
+    #     t1 = (p1.x - p3.x) * (p3.y - p4.y) - (p1.y - p3.y) * (p3.x - p4.x)
+    #     if t1 > t2 or t1 * t2 < 0:
+    #         return None
+    #     t = t1 / t2
+    #     return Point(p1.x + t * (p2.x - p1.x), p1.y + t * (p2.y - p1.y))
+
     @staticmethod
     def intersection(l1, l2) -> Optional[Point]:
         p1, p2 = l1.endpoints
         p3, p4 = l2.endpoints
-        t1 = (p1.x - p3.x) * (p3.y - p4.y) - (p1.y - p3.y) * (p3.x - p4.x)
-        t2 = (p1.x - p2.x) * (p3.y - p4.y) - (p1.y - p2.y) * (p3.x - p4.x)
-        if t1 > t2 or t1 * t2 < 0:
+        t = (p1.x - p2.x) * (p3.y - p4.y) - (p1.y - p2.y) * (p3.x - p4.x)
+        if t == 0:
             return None
-        t = t1 / t2
-        return Point(p1.x + t * (p2.x - p1.x), p1.y + t * (p2.y - p1.y))
+        x = (p1.x * p2.y - p1.y * p2.x) * (p3.x - p4.x) - (p1.x - p2.x) * (p3.x * p4.y - p3.y * p4.x)
+        y = (p1.x * p2.y - p1.y * p2.x) * (p3.y - p4.y) - (p1.y - p2.y) * (p3.x * p4.y - p3.y * p4.x)
+        p = Point(x / t, y / t)
+        if p in l1 and p in l2:
+            return p
 
     @property
     def slope(self):
         p1, p2 = self.endpoints
         if p1.x == p2.x:
             return float('inf')
-        return (p2.y-p1.y)/(p2.x-p1.x)
+        return (p2.y - p1.y) / (p2.x - p1.x)

@@ -3,7 +3,7 @@ from structures.treenode import TreeNode
 
 
 class AVLTree(BinarySearchTree):
-    def _put(self, key, val, current_node: TreeNode, append: bool = False) -> None:
+    def _put(self, key, val, current_node: TreeNode, append: bool = False) -> TreeNode:
         if key == current_node.key:
             if append:
                 if type(current_node.value) is not list:  # make it a list
@@ -12,22 +12,26 @@ class AVLTree(BinarySearchTree):
                     current_node.value.append(val)  # append to the end
             else:
                 current_node.value = val  # replace the value
-            return
+            return current_node
 
         if key < current_node.key:
             if current_node.has_left_child():
-                self._put(key, val, current_node.left_child, append)
+                return self._put(key, val, current_node.left_child, append)
             else:
-                current_node.left_child = TreeNode(key, [val] if append else val, parent=current_node)
+                new_node = TreeNode(key, [val] if append else val, parent=current_node)
+                current_node.left_child = new_node
                 self._size += 1
                 self.update_balance(current_node.left_child)
+                return new_node
         else:
             if current_node.has_right_child():
-                self._put(key, val, current_node.right_child, append)
+                return self._put(key, val, current_node.right_child, append)
             else:
-                current_node.right_child = TreeNode(key, [val] if append else val, parent=current_node)
+                new_node = TreeNode(key, [val] if append else val, parent=current_node)
+                current_node.right_child = new_node
                 self._size += 1
                 self.update_balance(current_node.right_child)
+                return new_node
 
     def update_balance(self, node: TreeNode) -> None:
         if node.balance_factor > 1 or node.balance_factor < -1:
@@ -77,10 +81,10 @@ class AVLTree(BinarySearchTree):
                 rot_root.parent.left_child = new_root
         new_root.right_child = rot_root
         rot_root.parent = new_root
-        rot_root.balance_factor = rot_root.balance_factor + \
-                                  1 + max(new_root.balance_factor, 0)
-        new_root.balance_factor = new_root.balance_factor + \
-                                  1 - min(rot_root.balance_factor, 0)
+        rot_root.balance_factor = rot_root.balance_factor - \
+                                  1 + min(new_root.balance_factor, 0)
+        new_root.balance_factor = new_root.balance_factor - \
+                                  1 - max(rot_root.balance_factor, 0)
 
     def rebalance(self, node: TreeNode) -> None:
         if node.balance_factor < 0:

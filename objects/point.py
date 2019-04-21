@@ -35,5 +35,7 @@ class Point:
         """Create instance of point out of list, tuple or map with keys 0, 1"""
         return tpl if type(tpl) is cls else cls(tpl[0], tpl[1])
 
-    def is_between(self, a, b):
-        return Point.distance(a, self) + Point.distance(self, b) == Point.distance(a, b)
+    def is_between(self, a, b, tol=1e-4):
+        return Point.distance(a, b) - tol <= \
+               (Point.distance(a, self) + Point.distance(self, b)) \
+               <= Point.distance(a, b) + tol

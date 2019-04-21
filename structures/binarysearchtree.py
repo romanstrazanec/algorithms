@@ -18,22 +18,27 @@ class BinarySearchTree:
     def __iter__(self):
         return iter(self.root) if self.root is not None else iter([])
 
-    def put(self, key, val) -> None:
+    def put(self, key, val) -> TreeNode:
+        """Saves the key with the value to the tree and returns the pointer to the added (changed) node"""
         if self.root:
-            self._put(key, val, self.root)
+            return self._put(key, val, self.root)
         else:
+            self._size = 1
             self.root = TreeNode(key, val)
-            self._size = 1
+            return self.root
 
-    def append(self, key, val) -> None:
-        """Same as put but appends the value to the key if it exists or creates a list with the value if not"""
+    def append(self, key, val) -> TreeNode:
+        """Same as put but appends the value to the key if it exists or creates a list with the value if not
+        and returns the pointer to the added (changed) node"""
         if self.root:
-            self._put(key, val, self.root, append=True)
+            return self._put(key, val, self.root, append=True)
         else:
-            self.root = TreeNode(key, [val])
             self._size = 1
+            self.root = TreeNode(key, [val])
+            return self.root
 
-    def _put(self, key, val, current_node, append: bool = False) -> None:
+    def _put(self, key, val, current_node, append: bool = False) -> TreeNode:
+        """Recursive _put method"""
         if key == current_node.key:  # if key already exists, replace value
             if append:
                 if type(current_node.value) is not list:  # make it a list
@@ -42,29 +47,31 @@ class BinarySearchTree:
                     current_node.value.append(val)  # append to the end
             else:
                 current_node.value = val  # replace the value
-            return
+            return current_node
 
         if key < current_node.key:  # go left
             if current_node.has_left_child():  # handle left tree
-                self._put(key, val, current_node.left_child, append)
+                return self._put(key, val, current_node.left_child, append)
             else:  # set left tree node
-                current_node.left_child = TreeNode(key, [val] if append else val, parent=current_node)
                 self._size += 1
+                current_node.left_child = TreeNode(key, [val] if append else val, parent=current_node)
+                return current_node.left_child
         else:  # go right
             if current_node.has_right_child():  # handle right tree
-                self._put(key, val, current_node.right_child, append)
+                return self._put(key, val, current_node.right_child, append)
             else:  # set right tree node
-                current_node.right_child = TreeNode(key, [val] if append else val, parent=current_node)
                 self._size += 1
+                current_node.right_child = TreeNode(key, [val] if append else val, parent=current_node)
+                return current_node.right_child
 
     def __setitem__(self, k, v):
         """bst[k] = v"""
         self.put(k, v)
 
-    def get(self, key):
+    def get(self, key) -> Optional[TreeNode]:
+        """Gets the pointer to the node of the existing key"""
         if self.root:
-            res = self._get(key, self.root)
-            return res.value if res else None
+            return self._get(key, self.root)
 
     def _get(self, key, current_node: TreeNode) -> Optional[TreeNode]:
         if not current_node:
@@ -77,32 +84,37 @@ class BinarySearchTree:
 
     def __getitem__(self, key):
         """bst[key]"""
-        return self.get(key)
+        res = self.get(key)
+        return res.value if res else None
 
     def __contains__(self, key):
         """key in bst"""
         return True if self._get(key, self.root) else False
 
     def delete(self, key):
+        """Deletes the key if exists or removes TreeNode if key is TreeNode"""
         if self._size > 1:
-            node_to_remove = self._get(key, self.root)
+            if type(key) is TreeNode:
+                node_to_remove = key
+            else:
+                node_to_remove = self._get(key, self.root)
             if node_to_remove:
-                self.remove(node_to_remove)
+                self._remove(node_to_remove)
                 self._size -= 1
             else:
-                raise KeyError('Error, key not in tree')
-        elif self._size == 1 and self.root.key == key:
+                raise KeyError(key)
+        elif self._size == 1 and (type(key) is TreeNode or self.root.key == key):
             self.root = None
-            self._size -= 1
+            self._size = 0
         else:
-            raise KeyError('Error, key not in tree')
+            raise KeyError(key)
 
     def __delitem__(self, key):
         """del bst[key]"""
         self.delete(key)
 
     @staticmethod
-    def remove(current_node):
+    def _remove(current_node):
         if current_node.is_leaf():
             if current_node == current_node.parent.left_child:
                 current_node.parent.left_child = None
@@ -149,14 +161,8 @@ class BinarySearchTree:
         if self.root:
             return self.root.max
 
-    def left_of(self, key):
-        pass
-
-    def right_of(self, key):
-        pass
-
     def __str__(self):
-        return "\n".join([str(i) for i in self])
+        return "\n".join([f"{i.balance_factor} | {i} ({'root' if i == self.root else ''})" for i in self])
 
     def __repr__(self):
         return str(self)

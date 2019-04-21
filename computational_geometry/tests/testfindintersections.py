@@ -1,60 +1,54 @@
+from random import random
+
 import matplotlib.pyplot as plt
 
-from findintersections import AVLTree
+from findintersections import _ls_lt, _find_new_event, find_intersections
 from objects.linesegment import LineSegment
 from objects.point import Point
+from structures.avltree import AVLTree
 
 
-def sweep_line_x_intersection(y, ls):
-    """x = (x1*(y2-y) + x2*(y-y1)) / (y2-y1)"""
-    y1 = ls.endpoints[0].y
-    y2 = ls.endpoints[1].y
-    x1 = ls.endpoints[0].x
-    if y1 == y2:
-        return x1
-    x2 = ls.endpoints[1].x
-    return (x1 * (y2 - y) + x2 * (y - y1)) / (y2 - y1)
-
-
-def line_segment__lt_(l1, l2) -> bool:
-    if l1.endpoints[0].x == l2.endpoints[0].x:
-        return l1.endpoints[1].x < l2.endpoints[1].x
-    return l1.endpoints[0].x < l2.endpoints[0].x
-
-
-def plt_line_segment(ls: LineSegment, **kwargs):
-    x = [p.x for p in ls.endpoints]
-    y = [p.y for p in ls.endpoints]
-    plt.scatter(x, y, **kwargs)
-    plt.plot(x, y, **kwargs)
+def plt_line_segments(_lss, **kwargs):
+    for _ls in _lss:
+        x = [p.x for p in _ls.endpoints]
+        y = [p.y for p in _ls.endpoints]
+        plt.scatter(x, y, **kwargs)
+        plt.plot(x, y, **kwargs)
 
 
 def sweep_line(x1, x2, y):
     return LineSegment([Point(x1, y), Point(x2, y)])
 
 
-# l1 = LineSegment(start=Point(1, 1), end=Point(3, 3))
-# l2 = LineSegment(start=Point(3, 1), end=Point(1, 4))
-#
-# sl = sweep_line(0, 4, 6)
-# p = intersection(l1, l2, sl.endpoints[0])
-#
-# plt_line_segment(l1)
-# plt_line_segment(l2)
-# plt_line_segment(sl, c='k', lw=.3)
-# print(p)
-# if p:
-#     plt.scatter(p.x, p.y)
-# plt.show()
+def random_point(_r):
+    return Point(random() * _r - _r / 2, random() * _r - _r / 2)
 
-line_segments = [LineSegment([Point(1, 5), Point(2, 3)]), LineSegment([Point(3, 4), Point(2, 2)]),
-                 LineSegment([Point(2, 4), Point(3, 2)]), LineSegment([Point(3, 6), Point(3, 4)]),
-                 LineSegment([Point(2, 4), Point(1, 1)])]
 
-# for i in line_segments:
-#     plt_line_segment(i)
-# plt.show()
+# test line segments
+# line_segments = [LineSegment([Point(1, 5), Point(2, 3)]), LineSegment([Point(3, 4), Point(2, 2)]),
+#                  LineSegment([Point(2, 4), Point(3, 2)]), LineSegment([Point(3, 6), Point(3, 4)]),
+#                  LineSegment([Point(2, 4), Point(1, 1)])]
 
+plot_process = True
+r = 4  # range from -r to r
+n = 10  # number of random points
+line_segments = [LineSegment([random_point(r), random_point(r)]) for _ in range(n)]
+
+# slow algorithm
+intersections = set()
+for i in range(len(line_segments)):
+    for ls in line_segments[i + 1:]:
+        intersection = LineSegment.intersection(ls, line_segments[i])
+        if intersection:
+            intersections.add((intersection.x, intersection.y))
+
+# show lines with intersection points
+plt_line_segments(line_segments)
+plt.scatter([i[0] for i in intersections], [i[1] for i in intersections], c='k')
+plt.title("Slow algorithm")
+plt.show()
+
+# start fast algorithm
 q = AVLTree()
 Point.__lt__ = lambda p1, p2: p1.x < p2.x if p1.y == p2.y else p1.y > p2.y
 
@@ -69,45 +63,91 @@ print("Event Q:")
 print(q)
 print()
 
+result = []
 status = AVLTree()
 while len(q) > 0:
     event_point = q.min
+    if plot_process:
+        plt_line_segments([sweep_line(-r, r, event_point.key.y)], label="sweep line", c='lightgray')
     print("=" * 15)
     print("EVENT POINT ", event_point.key)
 
     u = event_point.value
     l = []
     c = []
-    for elem in status:
-        line_segment = elem.key
-        if event_point.key == line_segment.endpoints[1]:
-            l.append(line_segment)
-        elif event_point.key in line_segment:
-            c.append(line_segment)
+    for elem in status:  # yield the TreeNode element with line segment as the key
+        if event_point.key == elem.key.endpoints[1]:
+            l.append(elem)
+        elif event_point.key in elem.key:
+            c.append(elem)
     print("u ", u)
-    print("l ", l)
-    print("c ", c)
+    print("l ", [i.key for i in l])
+    print("c ", [i.key for i in c])
+    if plot_process:
+        plt_line_segments(u, label="U", c='r')
+        plt_line_segments([i.key for i in l], label="L", c='b')
+        plt_line_segments([i.key for i in c], label="C", c='steelblue')
 
     if len(u) + len(l) + len(c) > 1:
-        print(event_point.key, " is intersection")
+        result.append(event_point.key)
+        print(event_point.key, " IS INTERSECTION <--------------")
 
-    for line_segment in l + c:
-        del status[line_segment]
+    for line_segment_node in l + c:
+        status.delete(line_segment_node)
 
-    def ls_lt(l1, l2, y):
-        x1 = sweep_line_x_intersection(y, l1)
-        x2 = sweep_line_x_intersection(y, l2)
-        if x1 == x2:
-            return l1.slope < l2.slope
-        return x1 < x2
+    LineSegment.__lt__ = lambda l1, l2: _ls_lt(l1, l2, event_point.key.y)
 
-    LineSegment.__lt__ = lambda l1, l2: ls_lt(l1, l2, event_point.key.y)
-
-    for line_segment in u + c:
-        status.put(line_segment, None)
-
+    uc = sorted(u + [i.key for i in c])
+    if len(uc) == 0:
+        temp = status.put(LineSegment(start=event_point.key, end=event_point.key), None)
+        if temp.has_both_children():
+            ne = _find_new_event(temp.predecessor.key, temp.successor.key, event_point.key, q)
+            if plot_process and ne:
+                plt.scatter(ne.x, ne.y, label='new event', c='k')
+        status.delete(temp)
+    else:
+        for line_segment in uc:
+            status.put(line_segment, None)
+        s1 = status.get(uc[0])
+        sl = s1.predecessor
+        if sl:
+            ne = _find_new_event(sl.key, s1.key, event_point.key, q)
+            if plot_process and ne:
+                plt.scatter(ne.x, ne.y, label='new event', c='k')
+        s2 = status.get(uc[-1])
+        sr = s2.successor
+        if sr:
+            ne = _find_new_event(sr.key, s2.key, event_point.key, q)
+            if plot_process and ne:
+                plt.scatter(ne.x, ne.y, label='new event', c='k')
+    if plot_process:
+        plt_line_segments([ls.key for ls in status], label="status", c='sandybrown', lw=.3)
+        plt.legend()
+        plt.title(f"Event point {event_point.key}")
+        plt.show()
     print("SWEEP LINE STATUS:")
     print(status)
     print()
 
     del q[event_point.key]
+
+plt_line_segments(line_segments)
+plt.scatter([p.x for p in result], [p.y for p in result], c='k')
+plt.title("Sweep line algorithm")
+plt.show()
+
+print("SLOW ALGORITHM")
+print("Number of intersections:", len(intersections))
+print(intersections)
+
+print("\nSWEEP LINE ALGORITHM")
+print("Number of intersections:", len(result))
+print(result)
+
+print("\nSWEEP LINE ALGORITHM (SOURCE)")
+fi = find_intersections(line_segments)
+print("Number of intersections:", len(fi))
+print(fi)
+
+# the current result and result from the slow algorithm and result from imported algorithm
+assert sorted(result) == sorted([Point.from_iter(i) for i in intersections]) == sorted(fi)
