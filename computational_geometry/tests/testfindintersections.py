@@ -38,7 +38,7 @@ def randint_point(_r):
 
 legend = False
 plot_process = False
-r = 100  # range from -r to r
+r = 1  # range from -r to r
 n = 20  # number of random segments
 
 # test line segments
@@ -47,20 +47,20 @@ n = 20  # number of random segments
 #                  LineSegment([Point(2, 4), Point(1, 1)])]
 
 # failed tests
-# line_segments = [
-#     LineSegment([Point(-0.479532, 0.479277),  Point(0.0329766, -0.320124)]),
-#     LineSegment([Point(-0.419874, 0.323043),  Point(-0.0474568, 0.0768236)]),
-#     LineSegment([Point(-0.14408, 0.165792),   Point(-0.0238416, -0.40193)]),
-#     LineSegment([Point(-0.0428549, 0.144741), Point(0.329162, 0.0863071)]),
-#     LineSegment([Point(0.444422, 0.119511),   Point(-0.215631, -0.0739168)]),
-#     LineSegment([Point(0.0722771, 0.0903832), Point(0.319375, -0.308218)]),
-# ]
+line_segments = [
+    LineSegment([Point(-0.479532, 0.479277), Point(0.0329766, -0.320124)]),
+    LineSegment([Point(-0.419874, 0.323043), Point(-0.0474568, 0.0768236)]),
+    LineSegment([Point(-0.14408, 0.165792), Point(-0.0238416, -0.40193)]),
+    LineSegment([Point(-0.0428549, 0.144741), Point(0.329162, 0.0863071)]),
+    LineSegment([Point(0.444422, 0.119511), Point(-0.215631, -0.0739168)]),
+    LineSegment([Point(0.0722771, 0.0903832), Point(0.319375, -0.308218)]),
+]
 
 # random line segments
 # line_segments = [LineSegment([random_point(r), random_point(r)]) for _ in range(n)]
 
 # random int line segments
-line_segments = [LineSegment([randint_point(r), randint_point(r)]) for _ in range(n)]
+# line_segments = [LineSegment([randint_point(r), randint_point(r)]) for _ in range(n)]
 
 # slow algorithm
 intersections = set()
@@ -115,10 +115,13 @@ while len(q) > 0:
     print("u ", u)
     print("l ", [i.key for i in l])
     print("c ", [i.key for i in c])
-    if plot_process:
-        plt_line_segments(u, label="U", c='maroon', lw=.3)
-        plt_line_segments([i.key for i in l], label="L", c='lightgreen', lw=.3)
-        plt_line_segments([i.key for i in c], label="C", c='steelblue', lw=.3)
+    # if plot_process:
+    #     plt_line_segments(u, label="U", c='maroon', lw=.3)
+    #     plt_line_segments([i.key for i in l], label="L", c='lightgreen', lw=.3)
+    #     plt_line_segments([i.key for i in c], label="C", c='steelblue', lw=.3)
+    #     if legend:
+    #         plt.legend(fancybox=True, framealpha=0.3)
+    #     plt.show()
 
     if len(u) + len(l) + len(c) > 1:
         result.append(event_point.key)
@@ -129,10 +132,10 @@ while len(q) > 0:
 
     LineSegment.__lt__ = lambda l1, l2: _ls_lt(l1, l2, event_point.key.y)
 
-    uc = sorted(u + [i.key for i in c])
+    uc = sorted(u + c)
     if len(uc) == 0:
         temp = status.put(LineSegment(start=event_point.key, end=event_point.key), None)
-        if temp.has_both_children():
+        if temp.predecessor and temp.successor:
             ne = _find_new_event(temp.predecessor.key, temp.successor.key, event_point.key, q)
             if ne:
                 print(ne, "added to Q <------")
@@ -170,6 +173,12 @@ while len(q) > 0:
     if plot_process:
         for i, ls in enumerate(status):
             plt_line_segment(ls.key, label=i, lw=.3)
+        for elem in q:
+            if elem.key == event_point.key:
+                plt.scatter(event_point.key.x, event_point.key.y, c='b')
+            else:
+                plt.scatter(elem.key.x, elem.key.y, c='r', alpha=.5)
+            plt_line_segments(elem.value, c='k', label='not in T yet', alpha=0.2)
         if legend:
             plt.legend(fancybox=True, framealpha=0.3)
         plt.title(f"{step} Event point {event_point.key}")

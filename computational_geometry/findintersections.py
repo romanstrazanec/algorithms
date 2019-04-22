@@ -26,12 +26,19 @@ def _sweep_line_x_intersection(y, ls: LineSegment):
     return (x1 * (y2 - y) + x2 * (y - y1)) / (y2 - y1)
 
 
+def _rot90ccw(ls: LineSegment) -> LineSegment:
+    """Rotate line segment counter clockwise"""
+    p1, p2 = ls.endpoints
+    return LineSegment([Point(-p1.y, p1.x), Point(-p2.y, p2.x)])
+
+
 def _ls_lt(l1: LineSegment, l2: LineSegment, y) -> bool:
     """__lt__ for line segments where y is the position of the sweep line"""
     x1 = _sweep_line_x_intersection(y, l1)
     x2 = _sweep_line_x_intersection(y, l2)
     if x1 == x2:
-        return l1.slope > l2.slope
+        # rotate the line segments counter clockwise and compare the slopes
+        return _rot90ccw(l1).slope < _rot90ccw(l2).slope
     return x1 < x2
 
 
@@ -80,8 +87,8 @@ def find_intersections(line_segments: List[LineSegment]) -> List[Point]:
             result.append(event_point.key)
 
         # delete the l and c line_segments from status
-        for line_segment_node in l + c:
-            status.delete(line_segment_node)
+        for line_segment_node in l + c:  # todo: fix iterating over l and c
+            status.delete(line_segment_node)  # nodes are replaced instead of deleted so the values in l and c change
 
         # every time the event point is updated, set __lt__ method to the current sweep line position
         LineSegment.__lt__ = lambda l1, l2: _ls_lt(l1, l2, event_point.key.y)
@@ -93,7 +100,7 @@ def find_intersections(line_segments: List[LineSegment]) -> List[Point]:
             # create a temporary LineSegment in the status with the event point as both endpoints
             # so it can check and then access left and right neighbour of the point
             temp = status.put(LineSegment(start=event_point.key, end=event_point.key), None)
-            if temp.has_both_children():
+            if temp.predecessor and temp.successor:
                 # check whether its neighbours intersect
                 _find_new_event(temp.predecessor.key, temp.successor.key, event_point.key, q)
             status.delete(temp)  # delete the temporary node
