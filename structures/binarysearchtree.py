@@ -162,7 +162,7 @@ class BinarySearchTree:
             return self.root.max
 
     def __str__(self):
-        return "\n".join([f"{i.balance_factor} | {i} ({'root' if i == self.root else ''})" for i in self])
+        return "\n".join([f"{i}{' (root)' if i == self.root else ''}" for i in self])
 
     def __repr__(self):
         return str(self)

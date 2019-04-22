@@ -82,9 +82,9 @@ class AVLTree(BinarySearchTree):
         new_root.right_child = rot_root
         rot_root.parent = new_root
         rot_root.balance_factor = rot_root.balance_factor - \
-                                  1 + min(new_root.balance_factor, 0)
+                                  1 - max(new_root.balance_factor, 0)
         new_root.balance_factor = new_root.balance_factor - \
-                                  1 - max(rot_root.balance_factor, 0)
+                                  1 + min(rot_root.balance_factor, 0)
 
     def rebalance(self, node: TreeNode) -> None:
         if node.balance_factor < 0:
@@ -99,3 +99,6 @@ class AVLTree(BinarySearchTree):
                 self.rotate_right(node)
             else:
                 self.rotate_right(node)
+
+    def __str__(self):
+        return "\n".join([f"{i.balance_factor} | {i}{' (root)' if i == self.root else ''}" for i in self])
