@@ -36,25 +36,25 @@ def randint_point(_r):
     return Point(randint(-_r, _r), randint(-_r, _r))
 
 
-legend = False
-plot_process = False
-r = 1  # range from -r to r
+legend = True
+plot_process = True
+r = 4  # range from -r to r
 n = 20  # number of random segments
 
 # test line segments
-# line_segments = [LineSegment([Point(1, 5), Point(2, 3)]), LineSegment([Point(3, 4), Point(2, 2)]),
-#                  LineSegment([Point(2, 4), Point(3, 2)]), LineSegment([Point(3, 6), Point(3, 4)]),
-#                  LineSegment([Point(2, 4), Point(1, 1)])]
+line_segments = [LineSegment([Point(1, 5), Point(2, 3)]), LineSegment([Point(3, 4), Point(2, 2)]),
+                 LineSegment([Point(2, 4), Point(3, 2)]), LineSegment([Point(3, 6), Point(3, 4)]),
+                 LineSegment([Point(2, 4), Point(1, 1)])]
 
 # failed tests
-line_segments = [
-    LineSegment([Point(-0.479532, 0.479277), Point(0.0329766, -0.320124)]),
-    LineSegment([Point(-0.419874, 0.323043), Point(-0.0474568, 0.0768236)]),
-    LineSegment([Point(-0.14408, 0.165792), Point(-0.0238416, -0.40193)]),
-    LineSegment([Point(-0.0428549, 0.144741), Point(0.329162, 0.0863071)]),
-    LineSegment([Point(0.444422, 0.119511), Point(-0.215631, -0.0739168)]),
-    LineSegment([Point(0.0722771, 0.0903832), Point(0.319375, -0.308218)]),
-]
+# line_segments = [
+#     LineSegment([Point(-0.479532, 0.479277), Point(0.0329766, -0.320124)]),
+#     LineSegment([Point(-0.419874, 0.323043), Point(-0.0474568, 0.0768236)]),
+#     LineSegment([Point(-0.14408, 0.165792), Point(-0.0238416, -0.40193)]),
+#     LineSegment([Point(-0.0428549, 0.144741), Point(0.329162, 0.0863071)]),
+#     LineSegment([Point(0.444422, 0.119511), Point(-0.215631, -0.0739168)]),
+#     LineSegment([Point(0.0722771, 0.0903832), Point(0.319375, -0.308218)]),
+# ]
 
 # random line segments
 # line_segments = [LineSegment([random_point(r), random_point(r)]) for _ in range(n)]
@@ -132,7 +132,7 @@ while len(q) > 0:
 
     LineSegment.__lt__ = lambda l1, l2: _ls_lt(l1, l2, event_point.key.y)
 
-    uc = sorted(u + c)
+    uc = sorted(u + [i.key for i in c])
     if len(uc) == 0:
         temp = status.put(LineSegment(start=event_point.key, end=event_point.key), None)
         if temp.predecessor and temp.successor:

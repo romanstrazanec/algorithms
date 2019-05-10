@@ -113,8 +113,7 @@ class BinarySearchTree:
         """del bst[key]"""
         self.delete(key)
 
-    @staticmethod
-    def _remove(current_node):
+    def _remove(self, current_node):
         if current_node.is_leaf():
             if current_node == current_node.parent.left_child:
                 current_node.parent.left_child = None

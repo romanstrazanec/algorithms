@@ -33,15 +33,15 @@ class AVLTree(BinarySearchTree):
                 self.update_balance(current_node.right_child)
                 return new_node
 
-    def update_balance(self, node: TreeNode) -> None:
+    def update_balance(self, node: TreeNode, deletion: bool = False) -> None:
         if node.balance_factor > 1 or node.balance_factor < -1:
             self.rebalance(node)
             return
         if node.parent is not None:
             if node.is_left_child():
-                node.parent.balance_factor += 1
+                node.parent.balance_factor += -1 if deletion else 1
             elif node.is_right_child():
-                node.parent.balance_factor -= 1
+                node.parent.balance_factor -= -1 if deletion else 1
 
             if node.parent.balance_factor != 0:
                 self.update_balance(node.parent)
@@ -99,6 +99,55 @@ class AVLTree(BinarySearchTree):
                 self.rotate_right(node)
             else:
                 self.rotate_right(node)
+
+    def _remove(self, current_node):
+        if current_node.is_leaf():
+            if current_node.is_left_child():
+                current_node.parent.left_child = None
+            else:
+                current_node.parent.right_child = None
+            self.update_balance(current_node, deletion=True)
+            del current_node
+        elif current_node.has_both_children():  # interior
+            successor = current_node.successor
+            successor.splice_out()
+            current_node.key = successor.key
+            current_node.value = successor.value
+            del successor
+            self.update_balance(current_node.left_child, deletion=True)  # any of children
+        else:  # this node has one child
+            if current_node.has_left_child():
+                if current_node.is_left_child():
+                    current_node.left_child.parent = current_node.parent
+                    current_node.parent.left_child = current_node.left_child
+                    self.update_balance(current_node.left_child, deletion=True)
+                    del current_node
+                elif current_node.is_right_child():
+                    current_node.left_child.parent = current_node.parent
+                    current_node.parent.right_child = current_node.left_child
+                    self.update_balance(current_node.left_child, deletion=True)
+                    del current_node
+                else:
+                    current_node.replace_node_data(current_node.left_child.key,
+                                                   current_node.left_child.value,
+                                                   current_node.left_child.left_child,
+                                                   current_node.left_child.right_child)
+            else:
+                if current_node.is_left_child():
+                    current_node.right_child.parent = current_node.parent
+                    current_node.parent.left_child = current_node.right_child
+                    self.update_balance(current_node.right_child, deletion=True)
+                    del current_node
+                elif current_node.is_right_child():
+                    current_node.right_child.parent = current_node.parent
+                    current_node.parent.right_child = current_node.right_child
+                    self.update_balance(current_node.right_child, deletion=True)
+                    del current_node
+                else:
+                    current_node.replace_node_data(current_node.right_child.key,
+                                                   current_node.right_child.value,
+                                                   current_node.right_child.left_child,
+                                                   current_node.right_child.right_child)
 
     def __str__(self):
         return "\n".join([f"{i.balance_factor} | {i}{' (root)' if i == self.root else ''}" for i in self])
