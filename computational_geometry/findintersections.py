@@ -87,8 +87,8 @@ def find_intersections(line_segments: List[LineSegment]) -> List[Point]:
             result.append(event_point.key)
 
         # delete the l and c line_segments from status
-        for line_segment_node in l + c:  # todo: fix iterating over l and c
-            status.delete(line_segment_node)  # nodes are replaced instead of deleted so the values in l and c change
+        for line_segment in (node.key for node in l + c):
+            status.delete(line_segment)
 
         # every time the event point is updated, set __lt__ method to the current sweep line position
         LineSegment.__lt__ = lambda l1, l2: _ls_lt(l1, l2, event_point.key.y)

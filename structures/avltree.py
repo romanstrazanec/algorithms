@@ -102,19 +102,19 @@ class AVLTree(BinarySearchTree):
 
     def _remove(self, current_node):
         if current_node.is_leaf():
+            self.update_balance(current_node, deletion=True)
             if current_node.is_left_child():
                 current_node.parent.left_child = None
             else:
                 current_node.parent.right_child = None
-            self.update_balance(current_node, deletion=True)
             del current_node
         elif current_node.has_both_children():  # interior
             successor = current_node.successor
+            self.update_balance(successor, deletion=True)  # any of children
             successor.splice_out()
             current_node.key = successor.key
             current_node.value = successor.value
             del successor
-            self.update_balance(current_node.left_child, deletion=True)  # any of children
         else:  # this node has one child
             if current_node.has_left_child():
                 if current_node.is_left_child():
